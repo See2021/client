@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ExcelSvg } from "@/components/Svg";
 import Chart from "@/components/Chart";
+import Link from "next/link";
 
 interface FarmData {
   farm: {
@@ -51,7 +52,7 @@ const PredictPage = ({ params }: Props) => {
     const storedUsername = sessionStorage.getItem("username");
 
     if (token) {
-      fetch(`http://localhost:4000/api/v1/user/${storedUsername}/farms`)
+      fetch(`http://localhost:3000/api/v1/user/${storedUsername}/farms`)
         .then((response) => response.json())
         .then((data) => {
           setFarmData(data.result);
@@ -70,7 +71,7 @@ const PredictPage = ({ params }: Props) => {
   useEffect(() => {
     if (selectedFarm) {
       setLoading(true);
-      fetch(`http://localhost:4000/api/v1/farm/${selectedFarm}/trees`)
+      fetch(`http://localhost:3000/api/v1/farm/${selectedFarm}/trees`)
         .then((response) => response.json())
         .then((data) => {
           setTreeData(data.result);
@@ -84,7 +85,7 @@ const PredictPage = ({ params }: Props) => {
         selectedFarm.toString()
       );
 
-      fetch(`http://localhost:4000/api/v1/farm/${selectedFarm}/predict`)
+      fetch(`http://localhost:3000/api/v1/farm/${selectedFarm}/predict`)
         .then((response) => response.json())
         .then((data) => {
           setPredictionData(data.result);
@@ -95,7 +96,7 @@ const PredictPage = ({ params }: Props) => {
     }
   }, [selectedFarm]);
 
-  const farmImageBaseUrl = "http://localhost:4000";
+  const farmImageBaseUrl = "http://localhost:3000";
 
   return (
     <div className="p-4">
@@ -189,7 +190,7 @@ const PredictPage = ({ params }: Props) => {
               )}
               <div className="flex-col justify-center items-center space-y-2">
                 <button className="btn btn-sm w-full btn-active btn-primary rounded-3xl text-white text-lg font-medium">
-                  ดูผลผลิตย้อนหลัง
+                  <Link href="/history">ดูผลผลิตย้อนหลัง</Link>
                 </button>
                 <button className="btn btn-sm btn-outline btn-primary rounded-3xl text-lg font-medium w-full">
                   <ExcelSvg />

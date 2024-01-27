@@ -44,7 +44,7 @@ const Chart = () => {
     console.log(getFarmId);
 
     if (token) {
-      fetch(`http://localhost:4000/api/v1/farm/${getFarmId}/trees`)
+      fetch(`http://localhost:3000/api/v1/farm/${getFarmId}/trees`)
         .then((response) => response.json())
         .then((data) => {
           setTreeData(data.result);
@@ -52,7 +52,7 @@ const Chart = () => {
         .catch((error) => {
           console.error("Error fetching farm data:", error);
         });
-      fetch(`http://localhost:4000/api/v1/farm/${getFarmId}/predict`)
+      fetch(`http://localhost:3000/api/v1/farm/${getFarmId}/predict`)
         .then((response) => response.json())
         .then((data) => {
           setPredictionData(data.result);

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { IconSvg } from "./Svg";
+import { ErrorSvg, IconSvg, SuccessSvg } from "./Svg";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import userAvatar from "../../public/ytt.png";
@@ -49,7 +49,7 @@ const Navbar = () => {
     setLoading(true);
     setInitialLoad(true);
     try {
-      const response = await fetch("http://localhost:4000/api/v1/user/login", {
+      const response = await fetch("http://localhost:3000/api/v1/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -232,21 +232,21 @@ const Navbar = () => {
           </div>
         )}
       </div>
-
-      <div>
-        {(showNotification || showErrNotification) && (
-          <div
-            role="alert"
-            className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-5/6 alert text-white ${
-              showNotification ? "alert-success" : "alert-error"
+      {(showNotification || showErrNotification) && (
+        <div
+          className={`fixed right-0 top-20 w-[80%] bg-white opacity-90 items-center px-2 py-2 text-sm 
+            border-t-4 rounded-b-md shadow-sm flex flex-row drop-shadow-md ${
+              showNotification ? "border-green-500" : "border-red-500"
             }`}
-          >
-            <p>
+        >
+          {showNotification ? <SuccessSvg /> : <ErrorSvg />}
+          <div className="ml-3">
+            <div className="font-bold text-left text-black">
               {showNotification ? notificationMessage : notificationErrMessage}
-            </p>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

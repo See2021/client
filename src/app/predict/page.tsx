@@ -51,7 +51,7 @@ const PredictPage = ({ params }: Props) => {
     const storedUsername = sessionStorage.getItem("username");
 
     if (token) {
-      fetch(`http://localhost:4000/api/v1/user/${storedUsername}/farms`)
+      fetch(`http://localhost:3000/api/v1/user/${storedUsername}/farms`)
         .then((response) => response.json())
         .then((data) => {
           setFarmData(data.result);
@@ -72,7 +72,7 @@ const PredictPage = ({ params }: Props) => {
   useEffect(() => {
     if (selectedFarm) {
       setLoading(true);
-      fetch(`http://localhost:4000/api/v1/farm/${selectedFarm}/trees`)
+      fetch(`http://localhost:3000/api/v1/farm/${selectedFarm}/trees`)
         .then((response) => response.json())
         .then((data) => {
           setTreeData(data.result);
@@ -87,7 +87,7 @@ const PredictPage = ({ params }: Props) => {
       );
       console.log("farm_id", setFarmId);
 
-      fetch(`http://localhost:4000/api/v1/farm/${selectedFarm}/predict`)
+      fetch(`http://localhost:3000/api/v1/farm/${selectedFarm}/predict`)
         .then((response) => response.json())
         .then((data) => {
           const formattedPredictionData = data.result.map(
@@ -112,7 +112,7 @@ const PredictPage = ({ params }: Props) => {
     }
   }, [selectedFarm]);
 
-  const farmImageBaseUrl = "http://localhost:4000";
+  const farmImageBaseUrl = "http://localhost:3000";
 
   return (
     <div>

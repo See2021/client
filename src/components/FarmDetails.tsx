@@ -11,6 +11,7 @@ import {
   EditSvg,
   InfoSvg,
   SearchSvg,
+  SuccessSvg,
   UpdateSvg,
 } from "./Svg";
 import Link from "next/link";
@@ -120,7 +121,7 @@ const FarmDetail: React.FC = () => {
 
             // Fetch user farms
             const farmsResponse = await fetch(
-              `http://localhost:4000/api/v1/user/${storedUsername}/farms`
+              `http://localhost:3000/api/v1/user/${storedUsername}/farms`
             );
             const farmsData = await farmsResponse.json();
             setUserFarms(farmsData.result);
@@ -137,7 +138,7 @@ const FarmDetail: React.FC = () => {
             const firstFarm = farmsData.result[0];
             if (firstFarm) {
               const totalCollectedResponse = await fetch(
-                `http://localhost:4000/api/v1/farm/user/${firstFarm.user_id}/total`
+                `http://localhost:3000/api/v1/farm/user/${firstFarm.user_id}/total`
               );
               const totalCollectedData = await totalCollectedResponse.json();
               setUserTrees(totalCollectedData);
@@ -156,7 +157,7 @@ const FarmDetail: React.FC = () => {
     fetchData();
   }, []);
 
-  const farmImageBaseUrl = "http://localhost:4000";
+  const farmImageBaseUrl = "http://localhost:3000";
 
   const handleAddFarm = async () => {
     if (fileInput.current?.files?.length) {
@@ -188,7 +189,7 @@ const FarmDetail: React.FC = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:4000/api/v1/farm/${username}`,
+          `http://localhost:3000/api/v1/farm/${username}`,
           requestOptions
         );
         const result = await response.json();
@@ -201,7 +202,7 @@ const FarmDetail: React.FC = () => {
         );
 
         const refetchResponse = await fetch(
-          `http://localhost:4000/api/v1/user/${username}/farms`
+          `http://localhost:3000/api/v1/user/${username}/farms`
         );
         const refetchData = await refetchResponse.json();
         setUserFarms(refetchData.result);
@@ -288,14 +289,14 @@ const FarmDetail: React.FC = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:4000/api/v1/farm/${selectedFarmId.farm_id}`,
+          `http://localhost:3000/api/v1/farm/${selectedFarmId.farm_id}`,
           requestOptions
         );
 
         if (response.ok) {
           // Fetch updated user farms
           const refetchResponse = await fetch(
-            `http://localhost:4000/api/v1/user/${username}/farms`
+            `http://localhost:3000/api/v1/user/${username}/farms`
           );
           const refetchData = await refetchResponse.json();
           setUserFarms(refetchData.result);
@@ -328,7 +329,7 @@ const FarmDetail: React.FC = () => {
   const handleDeleteFarm = async (farmId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/v1/farm/${farmId}`,
+        `http://localhost:3000/api/v1/farm/${farmId}`,
         {
           method: "DELETE",
           headers: {
@@ -981,16 +982,19 @@ const FarmDetail: React.FC = () => {
       </div>
 
       {/* alert add notify */}
-      <div>
-        {showNotification && (
-          <div
-            role="alert"
-            className="fixed bottom-4 left-1/2 -translate-x-1/2 alert alert-success text-white w-4/5 z-10"
-          >
-            <p>{notificationMessage}</p>
+      {showNotification && (
+        <div
+          className="fixed right-0 top-20 w-[80%] bg-white opacity-90 items-center px-2 py-2 text-sm 
+          border-t-4 rounded-b-md shadow-sm flex flex-row drop-shadow-md border-success"
+        >
+          <SuccessSvg />
+          <div className="ml-3">
+            <div className="font-bold text-left text-black">
+              {notificationMessage}
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* delete dialog */}
       <div>

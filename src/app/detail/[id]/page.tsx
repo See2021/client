@@ -8,6 +8,7 @@ import {
   AddCircleSvg,
   AlertDeleteSvg,
   CartSvg,
+  SuccessSvg,
   TreeIconSvg,
 } from "@/components/Svg";
 import BtnPredict from "@/components/BtnPredict";
@@ -67,7 +68,7 @@ const PageDetail = ({ params }: Props) => {
   useEffect(() => {
     const token = sessionStorage.getItem("Token");
     if (token) {
-      fetch(`http://localhost:4000/api/v1/farm/${params.id}`)
+      fetch(`http://localhost:3000/api/v1/farm/${params.id}`)
         .then((response) => response.json())
         .then((data) => {
           setFarmData(data.result);
@@ -75,7 +76,7 @@ const PageDetail = ({ params }: Props) => {
         .catch((error) => {
           console.error("Error fetching farm data:", error);
         });
-      fetch(`http://localhost:4000/api/v1/farm/${params.id}/trees`)
+      fetch(`http://localhost:3000/api/v1/farm/${params.id}/trees`)
         .then((response) => response.json())
         .then((data) => {
           setTreeData(data.result);
@@ -89,7 +90,7 @@ const PageDetail = ({ params }: Props) => {
     }
   }, [params.id, router]);
 
-  const farmImageBaseUrl = "http://localhost:4000";
+  const farmImageBaseUrl = "http://localhost:3000";
 
   useEffect(() => {
     // Reset input fields when a new tree is selected
@@ -137,7 +138,7 @@ const PageDetail = ({ params }: Props) => {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:4000/api/v1/farm/${params.id}/tree`,
+        `http://localhost:3000/api/v1/farm/${params.id}/tree`,
         {
           method: "POST",
           body: formData,
@@ -149,7 +150,7 @@ const PageDetail = ({ params }: Props) => {
         console.log("Tree added successfully");
 
         const treeResponse = await fetch(
-          `http://localhost:4000/api/v1/farm/${params.id}/trees`
+          `http://localhost:3000/api/v1/farm/${params.id}/trees`
         );
         const treeDataResult = await treeResponse.json();
         setTreeData(treeDataResult.result);
@@ -188,7 +189,7 @@ const PageDetail = ({ params }: Props) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:4000/api/v1/farm/update/tree/${selectedTree.id}`,
+        `http://localhost:3000/api/v1/farm/update/tree/${selectedTree.id}`,
         {
           method: "PUT",
           body: formData,
@@ -198,7 +199,7 @@ const PageDetail = ({ params }: Props) => {
 
       if (response.ok) {
         const treeResponse = await fetch(
-          `http://localhost:4000/api/v1/farm/${params.id}/trees`
+          `http://localhost:3000/api/v1/farm/${params.id}/trees`
         );
         const treeDataResult = await treeResponse.json();
         setTreeData(treeDataResult.result);
@@ -244,7 +245,7 @@ const PageDetail = ({ params }: Props) => {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:4000/api/v1/farm/delete/tree/${selectedTree.id}`,
+        `http://localhost:3000/api/v1/farm/delete/tree/${selectedTree.id}`,
         {
           method: "DELETE",
           redirect: "follow",
@@ -256,7 +257,7 @@ const PageDetail = ({ params }: Props) => {
 
         // Refresh tree data after a successful delete
         const treeResponse = await fetch(
-          `http://localhost:4000/api/v1/farm/${params.id}/trees`
+          `http://localhost:3000/api/v1/farm/${params.id}/trees`
         );
         const updatedTreeData = treeData.filter(
           (tree) => tree.id !== selectedTree.id
@@ -743,16 +744,19 @@ const PageDetail = ({ params }: Props) => {
 
             <BtnPredict />
 
-            <div>
-              {showNotification && (
-                <div
-                  role="alert"
-                  className="fixed bottom-4 left-1/2 -translate-x-1/2 alert alert-success text-white w-4/5 z-10"
-                >
-                  <p>{notificationMessage}</p>
+            {showNotification && (
+              <div
+                className="fixed right-4 top-14 w-[85%] bg-white items-center px-2 py-2 text-sm 
+                border-t-4 rounded-b shadow-sm flex flex-row border-success"
+              >
+                <SuccessSvg />
+                <div className="ml-3">
+                  <div className="font-bold text-left text-black">
+                    {notificationMessage}
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* delete dialog */}
             <div>
