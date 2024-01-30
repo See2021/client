@@ -8,6 +8,7 @@ import {
   AddCircleSvg,
   AlertDeleteSvg,
   CartSvg,
+  ClimateSvg,
   SuccessSvg,
   TreeIconSvg,
 } from "@/components/Svg";
@@ -346,19 +347,34 @@ const PageDetail = ({ params }: Props) => {
       {farmData ? (
         <div className="space-y-2">
           <div className="text-start w-full space-y-2">
-            <div className="text-4xl font-bold">
-              <div>ฟาร์มทุเรียน</div>
-              <div>{farmData.farm_name}</div>
+            <div
+              className="grid grid-cols-4 p-2 rounded-md
+            bg-yellow-200 bg-opacity-70 shadow-md"
+            >
+              <div className="col-span-3 text-4xl font-bold">
+                <div>ฟาร์มทุเรียน</div>
+                <div className="pt-2">{farmData.farm_name}</div>
+                {farmData.farm_status ? (
+                  <p className="text-base font-semibold text-success">
+                    พร้อมที่จะทำการเก็บเกี่ยวแล้ว
+                  </p>
+                ) : (
+                  <p className="text-base font-semibold">
+                    ยังไม่พร้อมที่จะทำการเก็บเกี่ยว
+                  </p>
+                )}
+              </div>
+              <div className="flex items-start text-xl font-medium flex-col 
+              rounded-md shadow-lg bg-primary p-2 bg-opacity-60 mb-6">
+                <div className="inline-flex mb-2">
+                  5°C <ClimateSvg />
+                </div>
+                <div className="text-xs font-medium btn btn-sm glass">
+                  sensors data
+                </div>
+              </div>
             </div>
-            {farmData.farm_status ? (
-              <p className="text-base font-semibold text-success">
-                พร้อมที่จะทำการเก็บเกี่ยวแล้ว
-              </p>
-            ) : (
-              <p className="text-base font-semibold">
-                ยังไม่พร้อมที่จะทำการเก็บเกี่ยว
-              </p>
-            )}
+
             <div>
               {farmData?.farm_photo && (
                 <Image

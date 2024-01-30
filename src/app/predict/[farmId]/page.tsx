@@ -190,7 +190,7 @@ const PredictPage = ({ params }: Props) => {
               )}
               <div className="flex-col justify-center items-center space-y-2">
                 <button className="btn btn-sm w-full btn-active btn-primary rounded-3xl text-white text-lg font-medium">
-                  <Link href="/history">ดูผลผลิตย้อนหลัง</Link>
+                  <Link href={`/history/${selectedFarm}`}>ดูผลผลิตย้อนหลัง</Link>
                 </button>
                 <button className="btn btn-sm btn-outline btn-primary rounded-3xl text-lg font-medium w-full">
                   <ExcelSvg />

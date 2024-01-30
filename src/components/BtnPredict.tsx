@@ -26,8 +26,8 @@ const BtnPredict = () => {
   }, []);
 
   return (
-    <div className="w-full text-center pt-4">
-      <div className="pb-2">
+    <div className="w-full text-center">
+      {/* <div className="pb-2">
         อีก
         <input
           type="number"
@@ -36,7 +36,7 @@ const BtnPredict = () => {
           required
         />
         วัน จะมีทุเรียนพร้อมที่จะเก็บทั้งหมด 500 ลูก
-      </div>
+      </div> */}
       <Link href={`/predict/${farmData?.[0]?.user_id ?? null}`}>
         <button className="btn btn-sm btn-outline btn-primary rounded-3xl text-lg font-medium">
           ดูการทำนายผลพลิต
