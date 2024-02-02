@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["54.234.44.46"],
+    domains: ["https://client-three-fawn.vercel.app/"],
   },
 };
 
