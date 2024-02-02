@@ -13,6 +13,7 @@ import {
   TreeIconSvg,
 } from "@/components/Svg";
 import BtnPredict from "@/components/BtnPredict";
+import Link from "next/link";
 
 interface FarmData {
   id: number;
@@ -349,33 +350,37 @@ const PageDetail = ({ params }: Props) => {
           <div className="text-start w-full space-y-2">
             <div
               className="grid grid-cols-4 p-2 rounded-md
-            bg-yellow-200 bg-opacity-70 shadow-md"
+            bg-green-200 bg-opacity-20 shadow-md"
             >
               <div className="col-span-3 text-4xl font-bold">
                 <div>ฟาร์มทุเรียน</div>
                 <div className="pt-2">{farmData.farm_name}</div>
                 {farmData.farm_status ? (
-                  <p className="text-base font-semibold text-success">
+                  <p className="text-base font-semibold text-success pt-2">
                     พร้อมที่จะทำการเก็บเกี่ยวแล้ว
                   </p>
                 ) : (
-                  <p className="text-base font-semibold">
+                  <p className="text-base font-semibold pt-2">
                     ยังไม่พร้อมที่จะทำการเก็บเกี่ยว
                   </p>
                 )}
               </div>
-              <div className="flex items-start text-xl font-medium flex-col 
-              rounded-md shadow-lg bg-primary p-2 bg-opacity-60 mb-6">
+              <div
+                className="flex items-start text-xl font-medium flex-col 
+              rounded-md shadow-lg bg-green-400 p-2 bg-opacity-60 mb-6"
+              >
                 <div className="inline-flex mb-2">
                   5°C <ClimateSvg />
                 </div>
-                <div className="text-xs font-medium btn btn-sm glass">
-                  sensors data
-                </div>
+                <Link href={"/sensor"}>
+                  <div className="text-xs font-medium btn btn-sm">
+                    sensors data
+                  </div>
+                </Link>
               </div>
             </div>
 
-            <div>
+            <div className="pt-2">
               {farmData?.farm_photo && (
                 <Image
                   src={`${farmImageBaseUrl}${farmData?.farm_photo}`}

@@ -59,7 +59,7 @@ const History = ({ params }: Props) => {
     }
 
     sessionStorage.setItem("farm_id", String(params.id));
-  }, []);
+  }, [params.id, router]);
 
   return (
     <div className="p-4">
