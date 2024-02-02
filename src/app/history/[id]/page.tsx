@@ -32,12 +32,12 @@ const History = ({ params }: Props) => {
     const storedFarmId = sessionStorage.getItem("farm_id");
 
     if (token) {
-      fetch(`http://localhost:3000/api/v1/user/${storedUsername}/farms`)
+      fetch(`http://54.234.44.46:3000/api/v1/user/${storedUsername}/farms`)
         .then((response) => response.json())
         .then((data) => {
           const userId = data.result[0].user_id;
           console.log("user id", userId);
-          fetch(`http://localhost:3000/api/v1/farm/user/${userId}/total`)
+          fetch(`http://54.234.44.46:3000/api/v1/farm/user/${userId}/total`)
             .then((response) => response.json())
             .then((data) => {
               setTreeData(data.result);

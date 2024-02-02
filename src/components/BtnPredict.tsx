@@ -14,7 +14,7 @@ const BtnPredict = () => {
     const storedUsername = sessionStorage.getItem("username");
 
     if (token) {
-      fetch(`http://localhost:3000/api/v1/user/${storedUsername}/farms`)
+      fetch(`http://54.234.44.46:3000/api/v1/user/${storedUsername}/farms`)
         .then((response) => response.json())
         .then((data) => {
           setFarmData(data.result);

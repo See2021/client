@@ -121,7 +121,7 @@ const FarmDetail: React.FC = () => {
 
             // Fetch user farms
             const farmsResponse = await fetch(
-              `http://localhost:3000/api/v1/user/${storedUsername}/farms`
+              `http://54.234.44.46:3000/api/v1/user/${storedUsername}/farms`
             );
             const farmsData = await farmsResponse.json();
             setUserFarms(farmsData.result);
@@ -138,7 +138,7 @@ const FarmDetail: React.FC = () => {
             const firstFarm = farmsData.result[0];
             if (firstFarm) {
               const totalCollectedResponse = await fetch(
-                `http://localhost:3000/api/v1/farm/user/${firstFarm.user_id}/total`
+                `http://54.234.44.46:3000/api/v1/farm/user/${firstFarm.user_id}/total`
               );
               const totalCollectedData = await totalCollectedResponse.json();
               setUserTrees(totalCollectedData);
@@ -157,7 +157,7 @@ const FarmDetail: React.FC = () => {
     fetchData();
   }, []);
 
-  const farmImageBaseUrl = "http://localhost:3000";
+  const farmImageBaseUrl = "http://54.234.44.46:3000";
 
   const handleAddFarm = async () => {
     if (fileInput.current?.files?.length) {
@@ -189,7 +189,7 @@ const FarmDetail: React.FC = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:3000/api/v1/farm/${username}`,
+          `http://54.234.44.46:3000/api/v1/farm/${username}`,
           requestOptions
         );
         const result = await response.json();
@@ -202,7 +202,7 @@ const FarmDetail: React.FC = () => {
         );
 
         const refetchResponse = await fetch(
-          `http://localhost:3000/api/v1/user/${username}/farms`
+          `http://54.234.44.46:3000/api/v1/user/${username}/farms`
         );
         const refetchData = await refetchResponse.json();
         setUserFarms(refetchData.result);
@@ -289,14 +289,14 @@ const FarmDetail: React.FC = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:3000/api/v1/farm/${selectedFarmId.farm_id}`,
+          `http://54.234.44.46:3000/api/v1/farm/${selectedFarmId.farm_id}`,
           requestOptions
         );
 
         if (response.ok) {
           // Fetch updated user farms
           const refetchResponse = await fetch(
-            `http://localhost:3000/api/v1/user/${username}/farms`
+            `http://54.234.44.46:3000/api/v1/user/${username}/farms`
           );
           const refetchData = await refetchResponse.json();
           setUserFarms(refetchData.result);
@@ -329,7 +329,7 @@ const FarmDetail: React.FC = () => {
   const handleDeleteFarm = async (farmId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/farm/${farmId}`,
+        `http://54.234.44.46:3000/api/v1/farm/${farmId}`,
         {
           method: "DELETE",
           headers: {
@@ -410,7 +410,6 @@ const FarmDetail: React.FC = () => {
         : 0
       : 0) || 0;
 
-  console.log("map dialog", modalMapOpen);
   return (
     <div className="space-y-2">
       {loadingData ? (
@@ -841,6 +840,7 @@ const FarmDetail: React.FC = () => {
                   <label
                     htmlFor="my_modal_6"
                     className="btn btn-success btn-sm text-white rounded-md "
+                    onClick={() => setMapOpen(true)}
                   >
                     Open map
                   </label>

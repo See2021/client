@@ -49,7 +49,7 @@ const Navbar = () => {
     setLoading(true);
     setInitialLoad(true);
     try {
-      const response = await fetch("http://localhost:3000/api/v1/user/login", {
+      const response = await fetch("http://54.234.44.46:3000/api/v1/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

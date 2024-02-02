@@ -65,12 +65,14 @@ const PageDetail = ({ params }: Props) => {
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [notificationMessage, setNotificationMessage] = useState<string>("");
 
+  const [temperature, setTemperature] = useState<number | null>(null);
+
   const router = useRouter();
 
   useEffect(() => {
     const token = sessionStorage.getItem("Token");
     if (token) {
-      fetch(`http://localhost:3000/api/v1/farm/${params.id}`)
+      fetch(`http://54.234.44.46:3000/api/v1/farm/${params.id}`)
         .then((response) => response.json())
         .then((data) => {
           setFarmData(data.result);
@@ -78,7 +80,7 @@ const PageDetail = ({ params }: Props) => {
         .catch((error) => {
           console.error("Error fetching farm data:", error);
         });
-      fetch(`http://localhost:3000/api/v1/farm/${params.id}/trees`)
+      fetch(`http://54.234.44.46:3000/api/v1/farm/${params.id}/trees`)
         .then((response) => response.json())
         .then((data) => {
           setTreeData(data.result);
@@ -92,7 +94,7 @@ const PageDetail = ({ params }: Props) => {
     }
   }, [params.id, router]);
 
-  const farmImageBaseUrl = "http://localhost:3000";
+  const farmImageBaseUrl = "http://54.234.44.46:3000";
 
   useEffect(() => {
     // Reset input fields when a new tree is selected
@@ -140,7 +142,7 @@ const PageDetail = ({ params }: Props) => {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:3000/api/v1/farm/${params.id}/tree`,
+        `http://54.234.44.46:3000/api/v1/farm/${params.id}/tree`,
         {
           method: "POST",
           body: formData,
@@ -152,7 +154,7 @@ const PageDetail = ({ params }: Props) => {
         console.log("Tree added successfully");
 
         const treeResponse = await fetch(
-          `http://localhost:3000/api/v1/farm/${params.id}/trees`
+          `http://54.234.44.46:3000/api/v1/farm/${params.id}/trees`
         );
         const treeDataResult = await treeResponse.json();
         setTreeData(treeDataResult.result);
@@ -191,7 +193,7 @@ const PageDetail = ({ params }: Props) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:3000/api/v1/farm/update/tree/${selectedTree.id}`,
+        `http://54.234.44.46:3000/api/v1/farm/update/tree/${selectedTree.id}`,
         {
           method: "PUT",
           body: formData,
@@ -201,7 +203,7 @@ const PageDetail = ({ params }: Props) => {
 
       if (response.ok) {
         const treeResponse = await fetch(
-          `http://localhost:3000/api/v1/farm/${params.id}/trees`
+          `http://54.234.44.46:3000/api/v1/farm/${params.id}/trees`
         );
         const treeDataResult = await treeResponse.json();
         setTreeData(treeDataResult.result);
@@ -247,7 +249,7 @@ const PageDetail = ({ params }: Props) => {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:3000/api/v1/farm/delete/tree/${selectedTree.id}`,
+        `http://54.234.44.46:3000/api/v1/farm/delete/tree/${selectedTree.id}`,
         {
           method: "DELETE",
           redirect: "follow",
@@ -259,7 +261,7 @@ const PageDetail = ({ params }: Props) => {
 
         // Refresh tree data after a successful delete
         const treeResponse = await fetch(
-          `http://localhost:3000/api/v1/farm/${params.id}/trees`
+          `http://54.234.44.46:3000/api/v1/farm/${params.id}/trees`
         );
         const updatedTreeData = treeData.filter(
           (tree) => tree.id !== selectedTree.id
@@ -340,6 +342,30 @@ const PageDetail = ({ params }: Props) => {
     }
   };
 
+  const fetchTemperature = async () => {
+    try {
+      const response = await fetch("http://44.203.152.252:4000/temp");
+      if (response.ok) {
+        const data = await response.json();
+        setTemperature(parseInt(data));
+      } else {
+        console.error("Failed to fetch temperature data");
+      }
+    } catch (error) {
+      console.error("Error fetching temperature data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTemperature();
+    const interval = setInterval(() => {
+      fetchTemperature();
+    }, 6000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   // const selectedTree = treeData.find((tree) => tree.id === selectedTreeId);
   // console.log(params.id);
 
@@ -366,11 +392,12 @@ const PageDetail = ({ params }: Props) => {
                 )}
               </div>
               <div
-                className="flex items-start text-xl font-medium flex-col 
+                className="flex items-start text-lg font-medium flex-col 
               rounded-md shadow-lg bg-green-400 p-2 bg-opacity-60 mb-6"
               >
                 <div className="inline-flex mb-2">
-                  5°C <ClimateSvg />
+                  {temperature !== null ? `${temperature}°C` : "00"}
+                  <ClimateSvg />
                 </div>
                 <Link href={"/sensor"}>
                   <div className="text-xs font-medium btn btn-sm">

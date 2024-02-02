@@ -58,7 +58,7 @@ const Register: React.FC = () => {
       };
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/user",
+        "http://54.234.44.46:3000/api/v1/user",
         requestOptions
       );
 

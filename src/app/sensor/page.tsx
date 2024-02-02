@@ -23,7 +23,7 @@ export default function Home() {
 
   const fetchTemperature = async () => {
     try {
-      const response = await fetch("http://localhost:4000/temp");
+      const response = await fetch("http://44.203.152.252:4000/temp");
       if (response.ok) {
         const data = await response.json();
         setTemperature(data);
@@ -37,7 +37,7 @@ export default function Home() {
 
   const fetchLowHighTemperature = async () => {
     try {
-      const response = await fetch("http://localhost:4000/temp/status");
+      const response = await fetch("http://44.203.152.252:4000/temp/status");
       if (response.ok) {
         const data = await response.json();
         setLowTemperature(data.low);
@@ -70,14 +70,14 @@ export default function Home() {
 
     const interval = setInterval(() => {
       fetchTemperature();
-    }, 4000);
+    }, 6000);
 
     const lowHighTemperatureInterval = setInterval(() => {
       fetchLowHighTemperature();
-    }, 4000);
+    }, 6000);
 
     const dateTimeInterval = setInterval(() => {
-      updateDateTime(); // Update current date and time at regular intervals
+      updateDateTime();
     }, 1000);
 
     return () => {
