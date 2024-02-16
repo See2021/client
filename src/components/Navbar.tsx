@@ -4,7 +4,7 @@ import { ErrorSvg, IconSvg, SuccessSvg } from "./Svg";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import userAvatar from "../../public/ytt.png";
-import Link from "next/link";
+import { BASE_URL } from "@/config"
 
 const Navbar = () => {
   const router = useRouter();
@@ -49,7 +49,7 @@ const Navbar = () => {
     setLoading(true);
     setInitialLoad(true);
     try {
-      const response = await fetch("http://54.234.44.46:3000/api/v1/user/login", {
+      const response = await fetch(`${BASE_URL}/api/v1/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +74,7 @@ const Navbar = () => {
         router.push("/farm");
 
         setShowNotification(true);
-        setNotificationMessage("เข้าสู้ระบบสำเร็จ");
+        setNotificationMessage("เข้าสู่ระบบสำเร็จ");
         setModalOpen(false);
       } else {
         setUsername("");
@@ -154,9 +154,9 @@ const Navbar = () => {
             </div>
           </div>
         ) : (
-          <div className="btn btn-primary text-white rounded-3xl px-1">
+          <div className="btn btn-primary text-white rounded-3xl px-1 3xs:px-6">
             <label htmlFor="my_modal_2">
-              <div className="mx-2">Log In</div>
+              <div className="mx-2">เข้าสู่ระบบ</div>
             </label>
           </div>
         )}
@@ -170,9 +170,14 @@ const Navbar = () => {
           onChange={() => setModalOpen(!modalOpen)}
         />
         <div className={`modal ${modalOpen ? "open" : ""}`}>
-          <div className="modal-box">
+          <div className="modal-box md:h-[50%]">
             <div className="flex flex-col space-y-3">
-              <h3 className="text-lg text-center font-bold">Log In</h3>
+              <h3 className="text-lg text-center font-bold lg:text-3xl">
+                เข้าสู่ระบบ
+              </h3>
+              <div className="hidden md:block font-bold lg:text-xl">
+                ขื่อผู้ใช้
+              </div>
               <input
                 type="username"
                 placeholder="username"
@@ -180,6 +185,9 @@ const Navbar = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 value={username}
               />
+              <div className="hidden md:block font-bold lg:text-xl">
+                รหัสผ่าน
+              </div>
               <input
                 type="password"
                 placeholder="********"
@@ -194,7 +202,7 @@ const Navbar = () => {
               />
               <div className="form-control">
                 <label className="label cursor-pointer">
-                  <span className="label-text">Remember me</span>
+                  <span className="label-text lg:text-xl">จดจำรหัสผ่าน</span>
                   <input
                     type="checkbox"
                     checked={checked}
@@ -203,8 +211,11 @@ const Navbar = () => {
                   />
                 </label>
               </div>
-              <button className="btn btn-primary" onClick={handleLogin}>
-                Log In
+              <button
+                className="btn btn-primary text-white md:text-xl"
+                onClick={handleLogin}
+              >
+                เข้าสู่ระบบ
               </button>
             </div>
           </div>
@@ -234,8 +245,9 @@ const Navbar = () => {
       </div>
       {(showNotification || showErrNotification) && (
         <div
-          className={`fixed right-0 top-20 w-[80%] bg-white opacity-90 items-center px-2 py-2 text-sm 
-            border-t-4 rounded-b-md shadow-sm flex flex-row drop-shadow-md ${
+          className={`fixed right-0 top-20 bg-white opacity-90 items-center 
+          px-2 py-2 text-sm w-[250px] sm:w-[300px] z-50
+            border-t-4 rounded-bl-md shadow-sm flex flex-row drop-shadow-md ${
               showNotification ? "border-green-500" : "border-red-500"
             }`}
         >

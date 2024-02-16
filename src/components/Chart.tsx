@@ -10,6 +10,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { BASE_URL } from "@/config"
 
 interface TreeData {
   id: number;
@@ -37,14 +38,15 @@ const Chart = () => {
   const [predictionData, setPredictionData] = useState<PredictionData[] | null>(
     null
   );
+  const [aspectRatio, setAspectRatio] = useState(16 / 9);
 
   useEffect(() => {
     const token = sessionStorage.getItem("Token");
     const getFarmId = sessionStorage.getItem("farm_id");
-    console.log(getFarmId);
+    // console.log(getFarmId);
 
     if (token) {
-      fetch(`http://54.234.44.46:3000/api/v1/farm/${getFarmId}/trees`)
+      fetch(`${BASE_URL}/api/v1/farm/${getFarmId}/trees`)
         .then((response) => response.json())
         .then((data) => {
           setTreeData(data.result);
@@ -52,7 +54,7 @@ const Chart = () => {
         .catch((error) => {
           console.error("Error fetching farm data:", error);
         });
-      fetch(`http://54.234.44.46:3000/api/v1/farm/${getFarmId}/predict`)
+      fetch(`${BASE_URL}/api/v1/farm/${getFarmId}/predict`)
         .then((response) => response.json())
         .then((data) => {
           setPredictionData(data.result);
@@ -61,6 +63,15 @@ const Chart = () => {
           console.error("Error fetching prediction data:", error);
         });
     }
+    function handleResize() {
+      if (window.innerWidth >= 768) {
+        setAspectRatio(16 / 5);
+      } else {
+        setAspectRatio(16 / 9);
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const updatedData = predictionData
@@ -80,13 +91,13 @@ const Chart = () => {
     <div className="my-4">
       <div className="flex justify-between mb-2">
         <div className="grid gap items-center">
-          <p className="text-md leading-none font-medium">
+          <p className="text-md leading-none font-medium md:font-semibold">
             จำนวนทุเรียน (พันลูก)
           </p>
         </div>
       </div>
       <div className="w-full h-full">
-        <ResponsiveContainer width="100%" aspect={16 / 9}>
+        <ResponsiveContainer width="100%" aspect={aspectRatio}>
           <LineChart data={updatedData} margin={{ left: -25, bottom: 10 }}>
             <CartesianGrid stroke="#ccc" />
             <YAxis />
@@ -109,13 +120,14 @@ const Chart = () => {
 
       <div className="flex justify-between">
         <div className="">
-          <p className=" text-md font-medium">24 มิ.ย.</p>
+          <p className=" text-md font-medium md:font-semibold">24 มิ.ย.</p>
         </div>
         <div className="">
-          <p className=" text-md font-medium">24 ก.ค.</p>
+          <p className=" text-md font-medium md:font-semibold">24 ก.ค.</p>
         </div>
       </div>
-      <div className="flex items-center justify-between space-x-2 mt-2">
+      <div className="flex items-center justify-between space-x-2 mt-2 md:px-24
+      lg:px-40 xl:px-64 2xl:px-96">
         <div className="w-full">
           <a
             href="#"
@@ -127,7 +139,7 @@ const Chart = () => {
               viewBox="0 0 60 2"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="mr-6"
+              className="mr-6 2xs:block hidden"
             >
               <path d="M0 1H60" stroke="#B46A07" strokeWidth="2" />
             </svg>
@@ -145,7 +157,7 @@ const Chart = () => {
               viewBox="0 0 60 2"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="mr-4"
+              className="mr-4 2xs:block hidden"
             >
               <path
                 d="M0 1H60"

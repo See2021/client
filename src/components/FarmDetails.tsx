@@ -16,6 +16,7 @@ import {
 } from "./Svg";
 import Link from "next/link";
 import BtnPredict from "./BtnPredict";
+import { BASE_URL } from "@/config"
 
 type FarmData = {
   user_farm_id: number;
@@ -121,7 +122,7 @@ const FarmDetail: React.FC = () => {
 
             // Fetch user farms
             const farmsResponse = await fetch(
-              `http://54.234.44.46:3000/api/v1/user/${storedUsername}/farms`
+              `${BASE_URL}/api/v1/user/${storedUsername}/farms`
             );
             const farmsData = await farmsResponse.json();
             setUserFarms(farmsData.result);
@@ -138,7 +139,7 @@ const FarmDetail: React.FC = () => {
             const firstFarm = farmsData.result[0];
             if (firstFarm) {
               const totalCollectedResponse = await fetch(
-                `http://54.234.44.46:3000/api/v1/farm/user/${firstFarm.user_id}/total`
+                `${BASE_URL}/api/v1/farm/user/${firstFarm.user_id}/total`
               );
               const totalCollectedData = await totalCollectedResponse.json();
               setUserTrees(totalCollectedData);
@@ -157,7 +158,7 @@ const FarmDetail: React.FC = () => {
     fetchData();
   }, []);
 
-  const farmImageBaseUrl = "http://54.234.44.46:3000";
+  const farmImageBaseUrl = `${BASE_URL}`;
 
   const handleAddFarm = async () => {
     if (fileInput.current?.files?.length) {
@@ -189,7 +190,7 @@ const FarmDetail: React.FC = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://54.234.44.46:3000/api/v1/farm/${username}`,
+          `${BASE_URL}/api/v1/farm/${username}`,
           requestOptions
         );
         const result = await response.json();
@@ -202,7 +203,7 @@ const FarmDetail: React.FC = () => {
         );
 
         const refetchResponse = await fetch(
-          `http://54.234.44.46:3000/api/v1/user/${username}/farms`
+          `${BASE_URL}/api/v1/user/${username}/farms`
         );
         const refetchData = await refetchResponse.json();
         setUserFarms(refetchData.result);
@@ -289,14 +290,14 @@ const FarmDetail: React.FC = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://54.234.44.46:3000/api/v1/farm/${selectedFarmId.farm_id}`,
+          `${BASE_URL}/api/v1/farm/${selectedFarmId.farm_id}`,
           requestOptions
         );
 
         if (response.ok) {
           // Fetch updated user farms
           const refetchResponse = await fetch(
-            `http://54.234.44.46:3000/api/v1/user/${username}/farms`
+            `${BASE_URL}/api/v1/user/${username}/farms`
           );
           const refetchData = await refetchResponse.json();
           setUserFarms(refetchData.result);
@@ -329,7 +330,7 @@ const FarmDetail: React.FC = () => {
   const handleDeleteFarm = async (farmId: number) => {
     try {
       const response = await fetch(
-        `http://54.234.44.46:3000/api/v1/farm/${farmId}`,
+        `${BASE_URL}/api/v1/farm/${farmId}`,
         {
           method: "DELETE",
           headers: {
@@ -422,8 +423,8 @@ const FarmDetail: React.FC = () => {
         </div>
       ) : (
         <div>
-          <div className="w-full text-center space-y-2 py-4">
-            <h1 className="text-3xl font-semibold">
+          <div className="w-full text-center space-y-2 py-4 sm:px-10 md:px-32 lg:px-48 lg:max-2xl:px-32 transition-all duration-300">
+            <h1 className="sm:text-5xl font-semibold text-3xl lg:text-8xl lg:max-2xl:text-8xl lg:pb-4 md:text-6xl">
               เก็บแล้วรวม{" "}
               {userTrees?.result?.sumCollected !== undefined
                 ? userTrees.result.sumCollected
@@ -442,13 +443,13 @@ const FarmDetail: React.FC = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex justify-center xl:justify-end">
+          <div className="space-y-2 lg:pt-8">
+            <div className="flex justify-end gap-0 sm:gap-8 sm:justify-center">
               <div className="join">
                 <div>
                   <div>
                     <input
-                      className="input input-bordered join-item w-[20rem] input-sm"
+                      className="input input-bordered join-item w-[14rem] sm:w-[20rem] input-sm sm:input-md"
                       placeholder="Search"
                       value={searchInput}
                       onChange={(e) => setSearchInput(e.target.value)}
@@ -456,17 +457,14 @@ const FarmDetail: React.FC = () => {
                   </div>
                 </div>
                 <div className="indicator">
-                  <button className="btn join-item btn-sm">
+                  <button className="btn join-item btn-sm sm:btn-md">
                     <SearchSvg />
                   </button>
                 </div>
               </div>
-            </div>
-
-            <div className="flex justify-end">
               <div>
                 <select
-                  className="select select-bordered join-item select-sm"
+                  className="select select-bordered join-item select-sm hidden sm:block sm:select-md"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                 >
@@ -478,20 +476,44 @@ const FarmDetail: React.FC = () => {
                 </select>
               </div>
             </div>
+            <div className="flex justify-between xs:hidden sm:hidden">
+              <div
+                className="btn btn-sm btn-primary text-white font-thin"
+                onClick={() => setModalOpen(true)}
+              >
+                เพิ่มฟาร์ม
+              </div>
+              <div className="">
+                <div>
+                  <select
+                    className="select select-bordered join-item select-sm"
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                  >
+                    <option>จัดเรียงตาม</option>
+                    <option>พร้อมที่จะเก็บ</option>
+                    <option>ยังไม่พร้อมที่จะเก็บ</option>
+                    <option>จากผลผลิตที่มาก</option>
+                    <option>จากผลผลิตที่น้อย</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
-            <div className="flex flex-row justify-center gap-2">
-              <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-6">
+            <div className="flex flex-row justify-center gap-2 md:pt-6">
+              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-6">
                 {filteredFarms.map((farm) => (
                   <div key={farm.user_farm_id} className="flex flex-col h-full">
-                    <div className="card bg-base-100 shadow-xl flex-1">
-                      <figure>
+                    <div className="card bg-base-100 shadow-xl flex-1 w-3/4 xs:w-full sm:w-full self-center">
+                      <figure className="relative sm:h-60 h-48 w-full">
                         <Link href={`/detail/${farm.user_farm_id}`}>
                           {farm.farm?.farm_photo && (
                             <Image
                               src={`${farmImageBaseUrl}${farm.farm?.farm_photo}`}
                               alt={`Farm ${farm.farm?.farm_name} Photo`}
-                              width={450}
-                              height={100}
+                              layout="fill"
+                              sizes="(min-width: 1024px) 1024px, 100vw"
+                              objectFit="cover"
                               priority
                             />
                           )}
@@ -533,10 +555,10 @@ const FarmDetail: React.FC = () => {
       )}
 
       {/* add modal */}
-      <div className="flex justify-center pt-4">
+      <div className="w-full text-center pt-4 xs:block hidden sm:block">
         <label
           htmlFor="my_modal_4"
-          className="btn btn-primary btn-sm text-white rounded-3xl text-lg font-medium"
+          className="btn btn-primary btn-sm text-white rounded-3xl text-lg font-medium btn-wide"
           onClick={() => setModalOpen(true)}
         >
           <AddSvg />
@@ -680,7 +702,7 @@ const FarmDetail: React.FC = () => {
                 <input
                   type="file"
                   id="farm_photo"
-                  className="file-input file-input-bordered file-input-primary max-w-xs col-span-2"
+                  className="file-input file-input-bordered file-input-primary max-w-lg col-span-2"
                   ref={fileInput}
                   onChange={(e) => {
                     const file = e.target.files?.[0] ?? null;
@@ -840,7 +862,6 @@ const FarmDetail: React.FC = () => {
                   <label
                     htmlFor="my_modal_6"
                     className="btn btn-success btn-sm text-white rounded-md "
-                    onClick={() => setMapOpen(true)}
                   >
                     Open map
                   </label>
@@ -863,7 +884,7 @@ const FarmDetail: React.FC = () => {
                 <input
                   type="file"
                   id="farm_photo"
-                  className="file-input file-input-bordered file-input-success w-full max-w-xs col-span-2"
+                  className="file-input file-input-bordered file-input-success w-full max-w-lg col-span-2"
                   ref={fileInput}
                   onChange={(e) => handleFileChange(e)}
                 />
@@ -984,8 +1005,9 @@ const FarmDetail: React.FC = () => {
       {/* alert add notify */}
       {showNotification && (
         <div
-          className="fixed right-0 top-20 w-[80%] bg-white opacity-90 items-center px-2 py-2 text-sm 
-          border-t-4 rounded-b-md shadow-sm flex flex-row drop-shadow-md border-success"
+          className="fixed right-0 top-20 bg-white opacity-90 items-center 
+          px-2 py-2 text-sm w-[250px] sm:w-[300px] z-50
+            border-t-4 rounded-bl-md shadow-sm flex flex-row drop-shadow-md border-success"
         >
           <SuccessSvg />
           <div className="ml-3">
@@ -994,7 +1016,7 @@ const FarmDetail: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+      )} 
 
       {/* delete dialog */}
       <div>

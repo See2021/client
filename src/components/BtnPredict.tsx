@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { BASE_URL } from "@/config"
 
 type FarmData = {
   user_id: number;
@@ -14,7 +15,7 @@ const BtnPredict = () => {
     const storedUsername = sessionStorage.getItem("username");
 
     if (token) {
-      fetch(`http://54.234.44.46:3000/api/v1/user/${storedUsername}/farms`)
+      fetch(`${BASE_URL}/api/v1/user/${storedUsername}/farms`)
         .then((response) => response.json())
         .then((data) => {
           setFarmData(data.result);
@@ -38,7 +39,8 @@ const BtnPredict = () => {
         วัน จะมีทุเรียนพร้อมที่จะเก็บทั้งหมด 500 ลูก
       </div> */}
       <Link href={`/predict/${farmData?.[0]?.user_id ?? null}`}>
-        <button className="btn btn-sm btn-outline btn-primary rounded-3xl text-lg font-medium">
+        <button className="btn btn-sm btn-outline btn-primary rounded-3xl 
+        text-lg font-medium btn-wide lg:btn-md lg:text-xl">
           ดูการทำนายผลพลิต
         </button>
       </Link>
