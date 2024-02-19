@@ -14,7 +14,7 @@ import {
 } from "@/components/Svg";
 import BtnPredict from "@/components/BtnPredict";
 import Link from "next/link";
-import { BASE_URL } from "@/config";
+import { BASE_URL, SUB_URL } from "@/config";
 
 interface FarmData {
   id: number;
@@ -75,7 +75,7 @@ const PageDetail = ({ params }: Props) => {
 
   const fetchTemperature = async () => {
     try {
-      const response = await fetch("http://localhost:5000/temp");
+      const response = await fetch(`${SUB_URL}/temp`);
       if (response.ok) {
         const data = await response.json();
         setTemperature(Math.round(data));
@@ -89,7 +89,7 @@ const PageDetail = ({ params }: Props) => {
 
   const fetchRainvolume = async () => {
     try {
-      const response = await fetch("http://localhost:5000/rain");
+      const response = await fetch(`${SUB_URL}0/rain`);
       if (response.ok) {
         const data = await response.json();
         setRainvolume(Math.round(data));
@@ -103,7 +103,7 @@ const PageDetail = ({ params }: Props) => {
 
   const fetchHumidity = async () => {
     try {
-      const response = await fetch("http://localhost:5000/humidity");
+      const response = await fetch(`${SUB_URL}/humidity`);
       if (response.ok) {
         const data = await response.json();
         setHumidity(Math.round(data));
@@ -117,7 +117,7 @@ const PageDetail = ({ params }: Props) => {
 
   const fetchWspeed = async () => {
     try {
-      const response = await fetch("http://localhost:5000/wind/speed");
+      const response = await fetch(`${SUB_URL}/wind/speed`);
       if (response.ok) {
         const data = await response.json();
         setWspeed(Math.round(data));

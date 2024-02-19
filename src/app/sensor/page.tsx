@@ -10,6 +10,7 @@ import low from "../../../public/low.png";
 import battery from "../../../public/battery.png";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { SUB_URL } from "@/config";
 
 export default function Home() {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
@@ -30,7 +31,7 @@ export default function Home() {
 
   const fetchTemperature = async () => {
     try {
-      const response = await fetch("http://35.240.232.74:5000/temp");
+      const response = await fetch(`${SUB_URL}/temp`);
       if (response.ok) {
         const data = await response.json();
         setTemperature(data);
@@ -44,7 +45,7 @@ export default function Home() {
 
   const fetchLowHighTemperature = async () => {
     try {
-      const response = await fetch("http://35.240.232.74:5000/temp/status");
+      const response = await fetch(`${SUB_URL}/temp/status`);
       if (response.ok) {
         const data = await response.json();
         setLowTemperature(data.low);
@@ -59,7 +60,7 @@ export default function Home() {
 
   const fetchRainvolume = async () => {
     try {
-      const response = await fetch("http://35.240.232.74:5000/rain");
+      const response = await fetch(`${SUB_URL}/rain`);
       if (response.ok) {
         const data = await response.json();
         setRainvolume(data);
@@ -73,7 +74,7 @@ export default function Home() {
 
   const fetchHumidity = async () => {
     try {
-      const response = await fetch("http://35.240.232.74:5000/humidity");
+      const response = await fetch(`${SUB_URL}/humidity`);
       if (response.ok) {
         const data = await response.json();
         setHumidity(Math.round(data));
@@ -87,7 +88,7 @@ export default function Home() {
 
   const fetchWspeed = async () => {
     try {
-      const response = await fetch("http://35.240.232.74:5000/wind/speed");
+      const response = await fetch(`${SUB_URL}/wind/speed`);
       if (response.ok) {
         const data = await response.json();
         setWspeed(Math.round(data));
@@ -114,7 +115,7 @@ export default function Home() {
 
   const fetchP = async () => {
     try {
-      const response = await fetch("http://35.240.232.74:5000/pump");
+      const response = await fetch(`${SUB_URL}/pump`);
       if (response.ok) {
         const data = await response.json();
         setP(Math.round(data));
@@ -128,7 +129,7 @@ export default function Home() {
 
   const fetchF = async () => {
     try {
-      const response = await fetch("http://35.240.232.74:5000/fertilizer");
+      const response = await fetch(`${SUB_URL}/fertilizer`);
       if (response.ok) {
         const data = await response.json();
         setF(Math.round(data));
@@ -142,7 +143,7 @@ export default function Home() {
 
   const fetchT = async () => {
     try {
-      const response = await fetch("http://localhost:5000/watertank");
+      const response = await fetch(`${SUB_URL}/watertank`);
       if (response.ok) {
         const data = await response.json();
         setT(Math.round(data));
