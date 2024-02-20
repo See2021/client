@@ -1,18 +1,36 @@
 "use client";
+import React from "react";
 import Image from "next/image";
-import profilePic from "../../../public/plant.png";
-import plant2 from "../../../public/plant2.png";
-import temper from "../../../public/thermometer.png";
-import turbin from "../../../public/turbin.png";
-import tank from "../../../public/tank.png";
-import high from "../../../public/high.png";
-import low from "../../../public/low.png";
-import battery from "../../../public/battery.png";
+import plant2 from "../../../../public/plant2.png";
+import temper from "../../../../public/thermometer.png";
+import turbin from "../../../../public/turbin.png";
+import tank from "../../../../public/tank.png";
+import high from "../../../../public/high.png";
+import low from "../../../../public/low.png";
+import battery from "../../../../public/battery.png";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { SUB_URL } from "@/config";
+import { BASE_URL, SUB_URL } from "@/config";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
+type Props = {
+  params: { id: number };
+};
+
+type FarmData = {
+  user_farm_id: number;
+  user_id: number;
+  farm_id: number;
+  farm_photo: string;
+  farm_province: string;
+};
+
+const Page = ({ params }: Props) => {
+  const [farmData, setFarmData] = useState<FarmData | null>(null);
+  const [token, setToken] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [loadingData, setLoadingData] = useState<boolean>(true);
+
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   const [temperature, setTemperature] = useState<number | null>(null);
   const [lowTemperature, setLowTemperature] = useState<number | null>(null);
@@ -24,6 +42,24 @@ export default function Home() {
   const [p, setP] = useState<number | null>(null);
   const [f, setF] = useState<number | null>(null);
   const [t, setT] = useState<number | null>(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("Token");
+    if (token) {
+      fetch(`${BASE_URL}/api/v1/farm/1`)
+        .then((response) => response.json())
+        .then((data) => {
+          setFarmData(data.result);
+        })
+        .catch((error) => {
+          console.error("Error fetching farm data:", error);
+        });
+    } else {
+      router.replace("/");
+    }
+  }, []);
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -215,6 +251,8 @@ export default function Home() {
     };
   }, []);
 
+  const farmImageBaseUrl = `${BASE_URL}`;
+
   return (
     <div className="flex flex-col items-center p-4 space-y-4">
       {/* first box */}
@@ -228,25 +266,34 @@ export default function Home() {
       </div>
 
       {/* second box */}
-      <div className="grid grid-cols-5 gap-4 w-full justify-items-center md:text-xl">
-        <div className="flex items-center flex-col">
+      <div className="grid grid-cols-5 gap-4 w-full justify-items-center text-sm md:text-xl">
+        <div
+          className="flex items-center flex-col lg:border-2 lg:border-black 
+        lg:p-2 w-full"
+        >
           <div className="hidden md:block md:pb-2 font-semibold">
             Temperature
           </div>
-          <Image
-            src={temper}
-            width={500}
-            height={500}
-            className="w-8 h-8 md:w-12 md:h-12"
-            alt="Pic of temperary"
-            priority
-          />
+          <div>
+            <Image
+              src={temper}
+              width={500}
+              height={500}
+              className="w-8 h-8 md:w-12 md:h-12"
+              alt="Pic of temperary"
+              priority
+            />
+          </div>
+
           <div className="font-bold md:pt-2">
             {temperature !== null ? `${temperature}°C` : "Loading..."}
           </div>
         </div>
 
-        <div className="flex items-center flex-col">
+        <div
+          className="flex items-center flex-col lg:border-2 lg:border-black 
+        lg:p-2 w-full"
+        >
           <div className="hidden md:block md:pb-2 font-semibold text-xl">
             Rain gauge
           </div>
@@ -263,7 +310,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-center flex-col">
+        <div
+          className="flex items-center flex-col lg:border-2 lg:border-black 
+        lg:p-2 w-full"
+        >
           <div className="hidden md:block md:pb-2 font-semibold text-xl">
             Humidity
           </div>
@@ -285,7 +335,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-center flex-col">
+        <div
+          className="flex items-center flex-col lg:border-2 lg:border-black 
+        lg:p-2 w-full"
+        >
           <div className="hidden md:block md:pb-2 font-semibold text-xl">
             Wind speed
           </div>
@@ -299,50 +352,142 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-center flex-col justify-center">
+        <Link
+          className="flex items-center flex-col justify-center lg:border-2 lg:border-black 
+          lg:p-2 w-full"
+          href={
+            "http://35.240.232.74:3000/d/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?shareView=public_dashboard&orgId=1&refresh=10s&from=1708057798111&to=1708059598111&theme=light"
+          }
+        >
+          <div className="hidden md:block md:pb-2 font-semibold text-xl">
+            Grafana
+          </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-12 h-12"
+            className="w-8 h-8 md:w-10 md:h-10"
           >
             <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M9.918 10.0005H7.082C6.66587 9.99708 6.26541 10.1591 5.96873 10.4509C5.67204 10.7427 5.50343 11.1404 5.5 11.5565V17.4455C5.5077 18.3117 6.21584 19.0078 7.082 19.0005H9.918C10.3341 19.004 10.7346 18.842 11.0313 18.5502C11.328 18.2584 11.4966 17.8607 11.5 17.4445V11.5565C11.4966 11.1404 11.328 10.7427 11.0313 10.4509C10.7346 10.1591 10.3341 9.99708 9.918 10.0005Z"
+              stroke="#000000"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M9.918 4.0006H7.082C6.23326 3.97706 5.52559 4.64492 5.5 5.4936V6.5076C5.52559 7.35629 6.23326 8.02415 7.082 8.0006H9.918C10.7667 8.02415 11.4744 7.35629 11.5 6.5076V5.4936C11.4744 4.64492 10.7667 3.97706 9.918 4.0006Z"
+              stroke="#000000"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M15.082 13.0007H17.917C18.3333 13.0044 18.734 12.8425 19.0309 12.5507C19.3278 12.2588 19.4966 11.861 19.5 11.4447V5.55666C19.4966 5.14054 19.328 4.74282 19.0313 4.45101C18.7346 4.1592 18.3341 3.9972 17.918 4.00066H15.082C14.6659 3.9972 14.2654 4.1592 13.9687 4.45101C13.672 4.74282 13.5034 5.14054 13.5 5.55666V11.4447C13.5034 11.8608 13.672 12.2585 13.9687 12.5503C14.2654 12.8421 14.6659 13.0041 15.082 13.0007Z"
+              stroke="#000000"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M15.082 19.0006H17.917C18.7661 19.0247 19.4744 18.3567 19.5 17.5076V16.4936C19.4744 15.6449 18.7667 14.9771 17.918 15.0006H15.082C14.2333 14.9771 13.5256 15.6449 13.5 16.4936V17.5066C13.525 18.3557 14.2329 19.0241 15.082 19.0006Z"
+              stroke="#000000"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
-          <Link
-            href={
-              "http://35.240.232.74:3000/d/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?shareView=public_dashboard&orgId=1&refresh=10s&from=1708057798111&to=1708059598111&theme=light"
-            }
-            className="text-sm gap-1 items-center"
-          >
-            Grafana Dashboard
-          </Link>
-        </div>
+
+          <div className="text-center font-bold md:py-2 md:text-lg">
+            Dashboard
+          </div>
+        </Link>
       </div>
 
       {/* picture box */}
-      <div className="flex items-center justify-center pt-12 flex-col">
-        <div className="btn btn-circle bg-white w-[240px] h-[240px] border-8 border-gray-100">
-          <Image
-            src={profilePic}
-            width={500}
-            height={500}
-            alt="Picture of the author"
-            className="rounded-full w-28 h-28"
-            priority
-          />
+      <div className="grid justify-items-center md:grid-cols-8 md:grid-rows-6 w-full">
+        <div className="col-span-2 row-span-4 hidden md:block w-full h-full">
+          <iframe
+            src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708378839379&to=1708389639379&theme=light&panelId=42"
+            className="w-full"
+            height="380"
+            frameBorder="0"
+          ></iframe>
         </div>
-        <div className="pt-2">Week 3</div>
-        <div className="text-teal-300 font-bold text-lg">Seedling</div>
+
+        <div
+          className="col-span-4 row-span-5 btn btn-circle w-[240px] h-[240px] border-8 
+        border-gray-100 md:btn-ghost md:w-[80%] md:h-[460px]"
+        >
+          {farmData?.farm_photo && (
+            <Image
+              src={`${farmImageBaseUrl}${farmData?.farm_photo}`}
+              width={500}
+              height={500}
+              alt="Picture of the farm"
+              className="rounded-full w-34 h-34 md:rounded-md"
+              priority
+            />
+          )}
+        </div>
+        <div className="col-span-2 row-span-4 hidden md:block w-full h-full">
+          <iframe
+            src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&from=1708368809688&to=1708390409688&refresh=10s&theme=light&panelId=37"
+            className="w-full"
+            height="380"
+            frameBorder="0"
+          ></iframe>
+        </div>
+        <div className="col-span-2 row-span-2 hidden md:block h-full w-full">
+          <iframe
+            src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708377505228&to=1708388305228&theme=light&panelId=31"
+            className="w-full"
+            height="190"
+            frameBorder="0"
+          ></iframe>
+        </div>
+        <div className="col-span-2 row-span-2 hidden md:block w-full h-full">
+          <iframe
+            src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708377824263&to=1708388624263&theme=light&panelId=23"
+            className="w-full"
+            height="190"
+            frameBorder="0"
+          ></iframe>
+        </div>
+        <div className="col-span-4 hidden md:block w-full h-full">
+          <div className="grid grid-cols-2">
+            <div>
+              <iframe
+                src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708387556877&to=1708387856877&theme=light&panelId=13"
+                className="w-full"
+                height="95"
+                frameBorder="0"
+              ></iframe>
+            </div>
+            <div>
+              <iframe
+                src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708387740961&to=1708388040961&theme=light&panelId=33"
+                className="w-full"
+                height="95"
+                frameBorder="0"
+              ></iframe>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* details box */}
-      <div className="grid grid-cols-6 w-full justify-items-center">
+      <div className="grid grid-cols-6 w-full justify-items-center md:hidden">
         <div className="col-span-1">
           <div className="indicator">
             <span className="indicator-item badge bg-teal-300 badge-xs mt-1.5 mr-1.5"></span>
@@ -415,10 +560,52 @@ export default function Home() {
           </svg>
         </div>
       </div>
+      <div className="hidden md:block h-48 w-full">
+        <div className="grid grid-cols-8">
+          <div className="col-span-2">
+            <iframe
+              src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708387093931&to=1708387393931&theme=light&panelId=14"
+              className="w-full"
+              height="150"
+              frameBorder="0"
+            ></iframe>
+            <div className="grid grid-cols-2 w-full">
+              <div>
+                <iframe
+                  src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708387324425&to=1708387624425&theme=light&panelId=21"
+                  className="w-full h-[50px] lg:h-[80px] xl:h-[100px]"
+                  frameBorder="0"
+                ></iframe>
+              </div>
+              <div>
+                <iframe
+                  src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708387426696&to=1708387726696&theme=light&panelId=22"
+                  className="w-full h-[50px] lg:h-[80px] xl:h-[100px]"
+                  frameBorder="0"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+          <div className="col-span-4">
+            <iframe
+              src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708386534140&to=1708386834140&theme=light&panelId=35"
+              className="w-full h-[200px] lg:h-[230px]"
+              frameBorder="0"
+            ></iframe>
+          </div>
+          <div className="col-span-2">
+            <iframe
+              src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&from=1708386744949&to=1708387044949&theme=light&panelId=26"
+              className="w-full h-[200px] lg:h-[230px]"
+              frameBorder="0"
+            ></iframe>
+          </div>
+        </div>
+      </div>
 
       <div
         className={`collapse bg-base-200 
-      ${isCollapsed ? "" : "collapse-active"}`}
+      ${isCollapsed ? "" : "collapse-active"} md:hidden`}
       >
         <input type="checkbox" checked={!isCollapsed} readOnly />
         <div className="collapse-title bg-gray-100 h-[120px] text-black">
@@ -459,7 +646,7 @@ export default function Home() {
               </svg>
             </div>
             <div
-              className="relative w-[240px] 2xs:w-[330px] h-10 bg-white 
+              className="relative w-[260px] 2xs:w-[330px] h-10 bg-white 
               rounded-full mt-2 3xs:w-[410px] sm:w-[580px] md:w-[700px] lg:w-[960px]
               xl:w-[1210px] 2xl:w-[1470px]"
             >
@@ -478,7 +665,9 @@ export default function Home() {
               <div className="col-span-2 text-xl font-bold">
                 {temperature !== null ? `${temperature}°C` : "Loading..."}
               </div>
-              <div className="text-sm font-semibold text-right">Province</div>
+              <div className="text-sm font-semibold text-right">
+                {farmData?.farm_photo && <div>{farmData?.farm_province}</div>}
+              </div>
             </div>
             <div className="text-gray-500 text-xs font-semibold">
               {currentDateTime}
@@ -552,28 +741,31 @@ export default function Home() {
           </div>
 
           <div className="row-span-2 rounded-xl shadow-md">
-            <div className="rounded-t-xl h-12 p-4 text-xl font-bold">
+            <div className="rounded-t-xl h-12 p-4 text-lg 2xs:text-xl font-bold">
               Water Tank
             </div>
             <div className="grid grid-cols-4">
               <div className="row-span-4 h-[290px] rounded-bl-xl p-4 grid grid-rows-6 gap-2">
                 <iframe
                   src="http://35.240.232.74:3000/d-solo/ace6a72d-9b7d-4704-a329-30759cb69e63/farm-1-dashboard?orgId=1&refresh=10s&theme=light&panelId=40"
-                  className="w-[40px] h-[260px] sm:w-[60px] sm:h-[260px]"
+                  className="w-[40px] sm:w-[60px] sm:h-[260px]"
                   frameBorder="0"
                 ></iframe>
               </div>
-              <div className="row-span-2 col-span-3 bg-white py-4 h-[200px] flex 2xs:items-end items-center justify-end sm:justify-center">
+              <div
+                className="ml-6 row-span-2 col-span-3 w-24 bg-white py-4 
+              h-[200px] flex justify-center items-center 3xs:w-[90%]"
+              >
                 <Image
                   src={tank}
                   width={110}
-                  className="h-24 w-auto 2xs:h-32 sm:h-36"
+                  className="h-16 2xs:h-20 3xs:h-32 w-auto"
                   alt="this tank"
                   priority
                 />
               </div>
-              <div className="row-span-2 col-span-3 grid grid-rows-2 rounded-br-xl h-[90px]">
-                <div className="text-xl font-bold inline-flex items-end">
+              <div className="ml-6 first-letter:row-span-2 col-span-3 grid grid-rows-2 rounded-br-xl h-[90px]">
+                <div className="text-md font-bold inline-flex items-end 2xs:text-lg">
                   {t !== null ? `${t}` : "Loading..."}
                   <p className="text-gray-400 pl-2">Liters</p>
                 </div>
@@ -606,4 +798,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Page;

@@ -89,7 +89,7 @@ const PageDetail = ({ params }: Props) => {
 
   const fetchRainvolume = async () => {
     try {
-      const response = await fetch(`${SUB_URL}0/rain`);
+      const response = await fetch(`${SUB_URL}/rain`);
       if (response.ok) {
         const data = await response.json();
         setRainvolume(Math.round(data));
@@ -429,9 +429,6 @@ const PageDetail = ({ params }: Props) => {
     }
   };
 
-  // const selectedTree = treeData.find((tree) => tree.id === selectedTreeId);
-  // console.log(params.id);
-
   return (
     <div className="flex min-h-screen flex-col items-center space-y-2 p-4">
       {farmData ? (
@@ -466,7 +463,7 @@ const PageDetail = ({ params }: Props) => {
                   {temperature !== null ? `${temperature}°C` : "Loading..."}{" "}
                   <ClimateSvg />
                 </div>
-                <Link href={"/sensor"}>
+                <Link href={`/sensor/${farmData.id}`}>
                   <div className="text-xs font-medium btn btn-sm">
                     sensors data
                   </div>
@@ -481,7 +478,7 @@ const PageDetail = ({ params }: Props) => {
                   {temperature !== null ? `${temperature}°C` : "Loading..."}{" "}
                   <ClimateSvg />
                 </div>
-                <Link href={"/sensor"}>
+                <Link href={`/sensor/${farmData.id}`}>
                   <div className="text-xs font-medium btn btn-sm">
                     sensors data
                   </div>
@@ -566,13 +563,19 @@ const PageDetail = ({ params }: Props) => {
                       </div>
                       <ClimateSvg />
                     </div>
-                    <Link href={'/sensor'} className="inline-flex justify-between gap-2">
-                      <div className="rounded-xl bg-green-400 w-2/4 h-6 flex 
-                      items-center justify-between p-2 lg:w-full lg:flex-col lg:h-[85px] xl:h-[100px]">
+                    <Link
+                      href={`/sensor/${farmData.id}`}
+                      className="inline-flex justify-between gap-2"
+                    >
+                      <div
+                        className="rounded-xl bg-green-400 w-2/4 h-6 flex 
+                      items-center justify-between p-2 lg:w-full lg:flex-col lg:h-[85px] xl:h-[100px]"
+                      >
                         <div>
-                          <svg 
-                            viewBox="0 0 32 32" 
-                            className="w-5 h-5 lg:w-7 lg:h-7 xl:w-10 xl:h-10">
+                          <svg
+                            viewBox="0 0 32 32"
+                            className="w-5 h-5 lg:w-7 lg:h-7 xl:w-10 xl:h-10"
+                          >
                             <path
                               className="feather_een"
                               d="M24,10c0-4.418-3.582-8-8-8c-3.741,0-6.873,2.572-7.748,6.041C4.738,8.415,2,11.387,2,15  c0,3.684,2.848,6.697,6.461,6.973C8.184,22.577,8,23.258,8,24c0,1.657,1.343,3,3,3s3-1.343,3-3c0-0.74-0.172-1.408-0.429-2  l10.533-0.005C27.369,21.939,30,19.279,30,16C30,12.686,27.314,10,24,10z M11,26c-1.103,0-2-0.897-2-2  c0-1.706,1.263-3.073,2.013-3.735C11.758,20.901,13,22.229,13,24C13,25.103,12.103,26,11,26z M23.777,21H13.019  c-0.448-0.657-0.966-1.165-1.366-1.505c-0.373-0.317-0.924-0.312-1.291,0.012C9.972,19.85,9.465,20.358,9.02,21H9  c-2.484,0-4.797-1.491-5.621-3.834c-1.391-3.954,1.227-7.731,4.979-8.13l0.693-0.074l0.118-0.467  c0.708-2.806,2.986-5.038,5.853-5.428C19.315,2.482,23,5.819,23,10v1h1c2.922,0,5.266,2.519,4.976,5.499  C28.722,19.097,26.387,21,23.777,21z M19.365,22.502c-0.786,0.69-2.054,2.052-2.317,3.838c-0.257,1.746,0.921,3.493,2.678,3.648  C21.507,30.145,23,28.747,23,27c0-2.177-1.456-3.748-2.339-4.5C20.286,22.181,19.735,22.177,19.365,22.502z M20,29  c-1.103,0-2-0.897-2-2c0-1.706,1.263-3.073,2.013-3.735C20.758,23.901,22,25.229,22,27C22,28.103,21.103,29,20,29z"
@@ -580,14 +583,19 @@ const PageDetail = ({ params }: Props) => {
                           </svg>
                         </div>
                         <div className="lg:font-semibold">{rainvolume}%</div>
-                        <div className="text-sm hidden lg:block font-semibold">Rain gauge</div>
+                        <div className="text-sm hidden lg:block font-semibold">
+                          Rain gauge
+                        </div>
                       </div>
-                      <div className="rounded-xl bg-green-400 w-2/4 h-6 flex 
-                      items-center justify-between p-2 lg:w-full lg:flex-col lg:h-[85px] xl:h-[100px]">
+                      <div
+                        className="rounded-xl bg-green-400 w-2/4 h-6 flex 
+                      items-center justify-between p-2 lg:w-full lg:flex-col lg:h-[85px] xl:h-[100px]"
+                      >
                         <div>
-                          <svg 
-                            viewBox="0 0 64 64" 
-                            className="w-5 h-5 lg:w-7 lg:h-7 xl:w-10 xl:h-10">
+                          <svg
+                            viewBox="0 0 64 64"
+                            className="w-5 h-5 lg:w-7 lg:h-7 xl:w-10 xl:h-10"
+                          >
                             <path d="M49.7,35.9C47.3,21.2,29.5,4,28.7,3.3c-0.4-0.4-1-0.4-1.4,0C26.4,4.1,6,23.7,6,39c0,12.1,9.9,22,22,22    c3.4,0,6.7-0.8,9.7-2.3c2.1,1.4,4.6,2.3,7.3,2.3c7.2,0,13-5.8,13-13C58,42.5,54.6,37.8,49.7,35.9z M28,59C17,59,8,50,8,39    C8,26.1,24.4,9,28,5.4C31.3,8.7,45,23,47.6,35.3C46.7,35.1,45.9,35,45,35c-7.2,0-13,5.8-13,13c0,3.7,1.5,7,4,9.3    C33.5,58.4,30.8,59,28,59z M45,59c-6.1,0-11-4.9-11-11s4.9-11,11-11s11,4.9,11,11S51.1,59,45,59z" />
 
                             <path d="M28,54c-8.3,0-15-6.7-15-15c0-0.6-0.4-1-1-1s-1,0.4-1,1c0,9.4,7.6,17,17,17c0.6,0,1-0.4,1-1S28.6,54,28,54z" />
@@ -600,10 +608,14 @@ const PageDetail = ({ params }: Props) => {
                           </svg>
                         </div>
                         <div className="lg:font-semibold">{humidity}%</div>
-                        <div className="text-sm hidden lg:block font-semibold">Humidity</div>
+                        <div className="text-sm hidden lg:block font-semibold">
+                          Humidity
+                        </div>
                       </div>
-                      <div className="rounded-xl bg-green-400 w-full h-6 flex 
-                      items-center justify-between p-2 lg:w-full lg:flex-col lg:h-[85px] xl:h-[100px]">
+                      <div
+                        className="rounded-xl bg-green-400 w-full h-6 flex 
+                      items-center justify-between p-2 lg:w-full lg:flex-col lg:h-[85px] xl:h-[100px]"
+                      >
                         <div>
                           <svg
                             viewBox="0 0 24 24"
@@ -613,7 +625,9 @@ const PageDetail = ({ params }: Props) => {
                           </svg>
                         </div>
                         <div className="lg:font-semibold">{windspeed} km/h</div>
-                        <div className="text-sm hidden lg:block font-semibold">Wind speed</div>
+                        <div className="text-sm hidden lg:block font-semibold">
+                          Wind speed
+                        </div>
                       </div>
                     </Link>
                   </div>
@@ -708,7 +722,7 @@ const PageDetail = ({ params }: Props) => {
                     <CartSvg />
                   </div>
                   <div className="text-xl font-semibold lg:pt-2 lg:text-2xl xl:text-3xl xl:pt-4">
-                    {farmData.duian_amount} ผล
+                    {farmData?.duian_amount} ผล
                   </div>
                   <div className="text-sm lg:text-xl xl:text-2xl">จำนวนผล</div>
                 </div>
@@ -937,6 +951,7 @@ const PageDetail = ({ params }: Props) => {
                             fileInputRef.current.value = "";
                           }
                           setSelectedImage(null);
+                          setModaUpdatelOpen(!modalUpdateOpen)
                         }}
                       >
                         Close
